@@ -13,6 +13,9 @@
   (package-refresh-contents)
   (package-install 'catppuccin-theme))
 
+(setq inhibit-splash-screen t)
+(setq initial-scratch-message nil)
+(setq inhibit-startup-message t)
 (setq next-line-add-newlines t)
 (setq scroll-conservatively 180)
 (setq ring-bell-function 'ignore)
@@ -139,6 +142,11 @@
 (use-package lsp-treemacs
   :ensure t)
 
+(use-package pc-bufsw
+  :ensure t
+  :config
+  (pc-bufsw t))
+
 (electric-pair-mode t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -155,10 +163,40 @@
  '(custom-safe-themes
    '("f5267eb209dbf6adf07a8eb66c658ed69eaabb8a76e61c9a5cee8e47a9025c0a" default))
  '(package-selected-packages
-   '(treemacs smex auto-package-update yasnippet typescript-mode format-all editorconfig lsp-treemacs flycheck sourcepawn-mode purple-haze-theme mood-line company company-mode lsp-ui lsp-mode elcord spaceline dashboard rainbow-delimiters god-mode beacon catppuccin-theme which-key use-package)))
+   '(pc-bufsw treemacs smex auto-package-update yasnippet typescript-mode format-all editorconfig lsp-treemacs flycheck sourcepawn-mode purple-haze-theme mood-line company company-mode lsp-ui lsp-mode elcord spaceline dashboard rainbow-delimiters god-mode beacon catppuccin-theme which-key use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 125 :width normal :foundry "outline" :family "Iosevka")))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 137 :width normal :foundry "outline" :family "azukifontB")))))
+
+;; from stackexchange user "Ole"
+;; Makes *scratch* empty.
+(setq initial-scratch-message "")
+
+;; Removes *scratch* from buffer after the mode has been set.
+(defun remove-scratch-buffer ()
+  (if (get-buffer "*scratch*")
+      (kill-buffer "*scratch*")))
+(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+
+;; Removes *messages* from the buffer.
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
+
+;; Removes *Completions* from buffer after you've opened a file.
+(add-hook 'minibuffer-exit-hook
+      '(lambda ()
+         (let ((buffer "*Completions*"))
+           (and (get-buffer buffer)
+                (kill-buffer buffer)))))
+
+;; Don't show *Buffer list* when opening multiple files at the same time.
+(setq inhibit-startup-buffer-menu t)
+
+;; Show only one active window when opening multiple files at the same time.
+(add-hook 'window-setup-hook 'delete-other-windows)
+
+;; No more typing the whole yes or no. Just y or n will do.
+(fset 'yes-or-no-p 'y-or-n-p)
