@@ -147,6 +147,27 @@
   :config
   (pc-bufsw t))
 
+(use-package ewal
+  :ensure t
+  :init (setq ewal-use-built-in-always-p nil
+              ewal-use-built-in-on-failure-p t
+              ewal-built-in-palette "sexy-material"))
+
+(use-package ewal-spacemacs-themes
+  :ensure t
+  :init (progn
+          (show-paren-mode +1)
+          (global-hl-line-mode)
+          (add-to-list  'default-frame-alist))
+  :config (progn
+            (load-theme 'ewal-spacemacs-modern t)
+            (enable-theme 'ewal-spacemacs-modern)))
+
+(defvar my-term-shell "/bin/zsh")
+(defadvice ansi-term (before force-bash)
+  (interactive (list my-term-shell)))
+(ad-activate 'ansi-term)
+
 (electric-pair-mode t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -154,21 +175,17 @@
 (when window-system (scroll-bar-mode -1))
 (when window-system (global-prettify-symbols-mode t))
 
-(custom-set-variables
+;;(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(purple-haze))
- '(custom-safe-themes
-   '("f5267eb209dbf6adf07a8eb66c658ed69eaabb8a76e61c9a5cee8e47a9025c0a" default))
- '(package-selected-packages
-   '(pc-bufsw treemacs smex auto-package-update yasnippet typescript-mode format-all editorconfig lsp-treemacs flycheck sourcepawn-mode purple-haze-theme mood-line company company-mode lsp-ui lsp-mode elcord spaceline dashboard rainbow-delimiters god-mode beacon catppuccin-theme which-key use-package)))
+ ;;'(custom-enabled-themes '(purple-haze))
+ ;;'(custom-safe-themes
+   ;;'("f5267eb209dbf6adf07a8eb66c658ed69eaabb8a76e61c9a5cee8e47a9025c0a" default))
+ ;;'(package-selected-packages
+   ;;'(ewal-spacemacs-themes ewal pc-bufsw treemacs smex auto-package-update yasnippet typescript-mode format-all editorconfig lsp-treemacs flycheck sourcepawn-mode purple-haze-theme mood-line company company-mode lsp-ui lsp-mode elcord spaceline dashboard rainbow-delimiters god-mode beacon catppuccin-theme which-key use-package)))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 137 :width normal :foundry "outline" :family "azukifontB")))))
 
 ;; from stackexchange user "Ole"
