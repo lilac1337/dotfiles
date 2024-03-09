@@ -3,12 +3,14 @@
 ** coding improvements
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; line numbers
-  (setq line-number-mode t)
+  (setq-default line-number-mode t)
   (global-display-line-numbers-mode 1)
 
   ;; line numbers relative to current cursor position
-  (setq display-line-numbers-type 'relative)
-  (setq column-number-mode t)
+  (setq-default display-line-numbers-type 'relative)
+  (setq-default column-number-mode t)
+
+  ;; c style
   (setq-default
    c-default-style "k&r"
    c-basic-offset 4)
@@ -16,11 +18,12 @@
   ;; 4-space indents
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
+  (setq-default tab-stop-list 4)
   (setq-default electric-indent-inhibit t)
-  (setq indent-line-function 'insert-tab)
+  (setq-default indent-line-function 'insert-tab)
 
   ;; automatically complete brackets/quotes
-  (setq electric-pair-pairs '(
+  (setq-default electric-pair-pairs '(
                               (?\( . ?\))
                               (?\[ . ?\])
                               (?\{ . ?\})
@@ -30,13 +33,13 @@
 #+END_SRC
 ** disable junk
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq inhibit-splash-screen t)
-  (setq initial-scratch-message nil)
-  (setq inhibit-startup-message t)
-  (setq ring-bell-function 'ignore)
-  (setq backup-directory-alist
+  (setq-default inhibit-splash-screen t)
+  (setq-default initial-scratch-message nil)
+  (setq-default inhibit-startup-message t)
+  (setq-default ring-bell-function 'ignore)
+  (setq-default backup-directory-alist
         `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms
+  (setq-default auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
   (electric-pair-mode t)
   (when window-system
@@ -84,7 +87,7 @@ non-coding related editing enhancements
 ** org mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; open org files with everything collapsed
-  (setq org-startup-folded t)
+  (setq-default org-startup-folded t)
 #+END_SRC
 ** terminal
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -97,7 +100,7 @@ non-coding related editing enhancements
 actual themeing is done through the ewal package below
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; larger modeline
-  (set-face-attribute 'mode-line nil  :height 175)
+  (add-hook 'find-file-hook (lambda () (set-face-attribute 'mode-line nil  :height 175)))
 
   ;; custom font
   (custom-set-faces
@@ -113,8 +116,8 @@ keeps code properly indented
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package aggressive-indent
     :ensure t
-    :init
-    (add-hook 'prog-mode-hook 'aggressive-indent-mode))
+    :init)
+;;    (add-hook 'prog-mode-hook 'aggressive-indent-mode))
 #+END_SRC
 ** beacon
 find cursor after moving
@@ -158,6 +161,14 @@ dim inactive windows
       (dimmer-configure-which-key))
     :init
     (dimmer-mode t))
+#+END_SRC
+** editorconfig
+load various things from a .editorconfig file
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
 #+END_SRC
 ** elcord
 set our discord status
